@@ -83,7 +83,6 @@ namespace FindFilesApplication
 			}
 			else
 			{
-				pattern = "*.*";
 				foreach (FileInfo fileInfo in dir.GetFiles(pattern))
 				{
 					_i++;
