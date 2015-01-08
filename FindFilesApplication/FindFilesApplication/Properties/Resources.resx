@@ -117,4 +117,7 @@
   <data name="Form1_btn_StopFind_Click_Поиск_закончен_" xml:space="preserve">
     <value>Поиск закончен!</value>
   </data>
+  <data name="Form1_btn_SaveResult_Click_txt_files____txt____txt_All_files__________" xml:space="preserve">
+    <value>txt files (*.txt)|*.txt|All files (*.*)|*.*</value>
+  </data>
 </root>

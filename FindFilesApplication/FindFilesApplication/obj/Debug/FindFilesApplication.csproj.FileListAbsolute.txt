@@ -7,3 +7,12 @@ c:\users\santa kufff\documents\visual studio 2013\Projects\FindFilesApplication\
 c:\users\santa kufff\documents\visual studio 2013\Projects\FindFilesApplication\FindFilesApplication\obj\Debug\FindFilesApplication.csproj.GenerateResource.Cache
 c:\users\santa kufff\documents\visual studio 2013\Projects\FindFilesApplication\FindFilesApplication\obj\Debug\FindFilesApplication.exe
 c:\users\santa kufff\documents\visual studio 2013\Projects\FindFilesApplication\FindFilesApplication\obj\Debug\FindFilesApplication.pdb
+C:\Users\Santa Kufff\Documents\GitHub\program-to-search-for-files\FindFilesApplication\FindFilesApplication\bin\Debug\FindFilesApplication.exe.config
+C:\Users\Santa Kufff\Documents\GitHub\program-to-search-for-files\FindFilesApplication\FindFilesApplication\obj\Debug\FindFilesApplication.exe
+C:\Users\Santa Kufff\Documents\GitHub\program-to-search-for-files\FindFilesApplication\FindFilesApplication\obj\Debug\FindFilesApplication.pdb
+C:\Users\Santa Kufff\Documents\GitHub\program-to-search-for-files\FindFilesApplication\FindFilesApplication\bin\Debug\FindFilesApplication.exe
+C:\Users\Santa Kufff\Documents\GitHub\program-to-search-for-files\FindFilesApplication\FindFilesApplication\bin\Debug\FindFilesApplication.pdb
+C:\Users\Santa Kufff\Documents\GitHub\program-to-search-for-files\FindFilesApplication\FindFilesApplication\obj\Debug\FindFilesApplication.csprojResolveAssemblyReference.cache
+C:\Users\Santa Kufff\Documents\GitHub\program-to-search-for-files\FindFilesApplication\FindFilesApplication\obj\Debug\FindFilesApplication.Form1.resources
+C:\Users\Santa Kufff\Documents\GitHub\program-to-search-for-files\FindFilesApplication\FindFilesApplication\obj\Debug\FindFilesApplication.Properties.Resources.resources
+C:\Users\Santa Kufff\Documents\GitHub\program-to-search-for-files\FindFilesApplication\FindFilesApplication\obj\Debug\FindFilesApplication.csproj.GenerateResource.Cache

@@ -160,5 +160,30 @@ namespace FindFilesApplication
 
 		private delegate void SetStringDelegate(string parameter);
 		#endregion
+
+		#region сохранение результата в файл
+		private void btn_SaveResult_Click(object sender, EventArgs e)
+		{
+			saveFileDialog1.Filter = @"txt files (*.txt)|*.txt|All files (*.*)|*.*";
+			saveFileDialog1.FilterIndex = 2;
+			saveFileDialog1.RestoreDirectory = true;
+
+			if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+			{
+				Stream myStream;
+// ReSharper disable once ConditionIsAlwaysTrueOrFalse
+				if ((myStream = saveFileDialog1.OpenFile()) != null)
+				{
+					var sw = new StreamWriter(myStream);
+					foreach (var item in lbox_Result.Items)
+					{
+						sw.WriteLine(item.ToString());
+					}
+					sw.Close();
+					myStream.Close();
+				}
+			}
+		}
+		#endregion
 	}
 }

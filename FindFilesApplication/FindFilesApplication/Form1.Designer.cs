@@ -44,6 +44,8 @@
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.lbl_CurrentDirectory = new System.Windows.Forms.Label();
 			this.lbl_Count = new System.Windows.Forms.Label();
+			this.btn_SaveResult = new System.Windows.Forms.Button();
+			this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -59,9 +61,9 @@
 			// btn_Explorer
 			// 
 			this.btn_Explorer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btn_Explorer.Location = new System.Drawing.Point(334, 26);
+			this.btn_Explorer.Location = new System.Drawing.Point(334, 10);
 			this.btn_Explorer.Name = "btn_Explorer";
-			this.btn_Explorer.Size = new System.Drawing.Size(100, 64);
+			this.btn_Explorer.Size = new System.Drawing.Size(100, 41);
 			this.btn_Explorer.TabIndex = 6;
 			this.btn_Explorer.Text = "Обозреватель...";
 			this.btn_Explorer.UseVisualStyleBackColor = true;
@@ -121,9 +123,9 @@
 			// btn_Clear
 			// 
 			this.btn_Clear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btn_Clear.Location = new System.Drawing.Point(442, 26);
+			this.btn_Clear.Location = new System.Drawing.Point(442, 10);
 			this.btn_Clear.Name = "btn_Clear";
-			this.btn_Clear.Size = new System.Drawing.Size(75, 64);
+			this.btn_Clear.Size = new System.Drawing.Size(75, 41);
 			this.btn_Clear.TabIndex = 12;
 			this.btn_Clear.Text = "Очистить";
 			this.btn_Clear.UseVisualStyleBackColor = true;
@@ -202,11 +204,23 @@
 			this.lbl_Count.Size = new System.Drawing.Size(0, 13);
 			this.lbl_Count.TabIndex = 19;
 			// 
+			// btn_SaveResult
+			// 
+			this.btn_SaveResult.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btn_SaveResult.Location = new System.Drawing.Point(334, 57);
+			this.btn_SaveResult.Name = "btn_SaveResult";
+			this.btn_SaveResult.Size = new System.Drawing.Size(100, 41);
+			this.btn_SaveResult.TabIndex = 20;
+			this.btn_SaveResult.Text = "Сохранить результат";
+			this.btn_SaveResult.UseVisualStyleBackColor = true;
+			this.btn_SaveResult.Click += new System.EventHandler(this.btn_SaveResult_Click);
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(529, 505);
+			this.Controls.Add(this.btn_SaveResult);
 			this.Controls.Add(this.lbl_Count);
 			this.Controls.Add(this.lbl_CurrentDirectory);
 			this.Controls.Add(this.tableLayoutPanel1);
@@ -246,6 +260,8 @@
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private System.Windows.Forms.Label lbl_CurrentDirectory;
 		private System.Windows.Forms.Label lbl_Count;
+		private System.Windows.Forms.Button btn_SaveResult;
+		private System.Windows.Forms.SaveFileDialog saveFileDialog1;
     }
 }
 
