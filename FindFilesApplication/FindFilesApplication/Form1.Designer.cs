@@ -236,6 +236,8 @@
 			this.Controls.Add(this.tbox_StartDir);
 			this.Name = "Form1";
 			this.Text = "Поиск файлов";
+			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
+			this.Load += new System.EventHandler(this.Form1_Load);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using FindFilesApplication.Properties;
+using Microsoft.Win32;
 
 namespace FindFilesApplication
 {
@@ -182,6 +183,37 @@ namespace FindFilesApplication
 					myStream.Close();
 				}
 			}
+		}
+		#endregion
+
+		#region сохранение параметров
+		private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+		{
+			using (RegistryKey key = Registry.CurrentUser.OpenSubKey("Software\\AppFind", true))
+			{
+				key.SetValue("StartDirectory", tbox_StartDir.Text, RegistryValueKind.String);
+				key.SetValue("FileForFind", tbox_FileForFind.Text, RegistryValueKind.String);
+				key.SetValue("TextForFind", tbox_TextForFind.Text, RegistryValueKind.String);
+				key.SetValue("FlagRecursive", flagRecursive.Checked ? 1 : 0, RegistryValueKind.DWord);
+			}
+		}
+
+		private void Form1_Load(object sender, EventArgs e)
+		{
+			RegistryKey key = Registry.CurrentUser.OpenSubKey("Software\\AppFind");
+			if (key == null)
+			{
+				key = Registry.CurrentUser.CreateSubKey("Software\\AppFind");
+			}
+
+			int flRc = (int)key.GetValue("FlagRecursive", 0);
+			flagRecursive.Checked = (flRc == 1);
+			string TxFrFn = (string)key.GetValue("TextForFind");
+			tbox_TextForFind.Text = TxFrFn;
+			string FlFrFn = (string)key.GetValue("FileForFind");
+			tbox_FileForFind.Text = FlFrFn;
+			string StDr = (string)key.GetValue("StartDirectory");
+			tbox_StartDir.Text = StDr;
 		}
 		#endregion
 	}
