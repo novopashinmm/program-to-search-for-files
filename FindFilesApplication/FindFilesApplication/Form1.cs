@@ -227,6 +227,7 @@ namespace FindFilesApplication
 					key.SetValue("FlagSystem", chb_System.Checked ? 1 : 0, RegistryValueKind.DWord);
 					key.SetValue("FlagArchive", chb_Arch.Checked ? 1 : 0, RegistryValueKind.DWord);
 					key.SetValue("FlagHidden", chb_Hidden.Checked ? 1 : 0, RegistryValueKind.DWord);
+					key.SetValue("FlagSaveResult", chb_SaveResultPoisk.Checked ? 1 : 0, RegistryValueKind.DWord);
 				}
 			}
 		}
@@ -236,6 +237,11 @@ namespace FindFilesApplication
 			RegistryKey key = Registry.CurrentUser.OpenSubKey("Software\\AppFind") ??
 			                  Registry.CurrentUser.CreateSubKey("Software\\AppFind");
 
+			if (key != null)
+			{
+				var flSr = (int)key.GetValue("FlagSaveResult", 0);
+				chb_SaveResultPoisk.Checked = (flSr == 1);
+			}
 			if (key != null)
 			{
 				var flRc = (int)key.GetValue("FlagRecursive", 0);
