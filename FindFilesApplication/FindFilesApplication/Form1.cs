@@ -9,16 +9,16 @@ using Microsoft.Win32;
 
 namespace FindFilesApplication
 {
-	public enum TypeForFind
-	{
-		FindFile,
-		FindText
-	}
-
 	public partial class Form1 : Form
 	{
 		private Thread _thread;
 		private DateTime _timeStart;
+
+		public enum TypeForFind
+		{
+			FindFile,
+			FindText
+		}
 
 		public Form1()
 		{
