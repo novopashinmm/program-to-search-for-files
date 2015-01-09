@@ -51,9 +51,13 @@ namespace FindFilesApplication
 					flagForFind = TypeForFind.FindText;
 				}
 
+				var attributes = (chb_System.Checked ? FileAttributes.System : 0) |
+								 (chb_Arch.Checked ? FileAttributes.Archive : 0) |
+								 (chb_Hidden.Checked ? FileAttributes.Hidden : 0);
+
 				var dir = new DirectoryInfo(tbox_StartDir.Text);
 				string file = tbox_FileForFind.Text;
-				FindInDir(dir, file, flagForFind, flagRecursive.Checked);
+				FindInDir(dir, file, flagForFind, flagRecursive.Checked, attributes);
 			}
 			catch (ThreadAbortException)
 			{
@@ -67,22 +71,24 @@ namespace FindFilesApplication
 
 		int _i;
 // ReSharper disable once InconsistentNaming
-		public void FindInDir(DirectoryInfo dir, string pattern, TypeForFind flagForFind, bool _flagRecursive)
+		public void FindInDir(DirectoryInfo dir, string pattern, TypeForFind flagForFind, bool _flagRecursive, FileAttributes attributes)
 		{
 			if (flagForFind == TypeForFind.FindFile)
 			{
 				foreach (FileInfo fileInfo in dir.GetFiles(pattern))
 				{
+					//MessageBox.Show(fileInfo.Attributes.ToString());
 					_i++;
 					SetTime(_timeStart);
 					SetCountDir(_i);
 					SetCurrentDir(fileInfo.FullName);
-					SetItemDir(fileInfo.FullName);
+					if ((fileInfo.Attributes & attributes) == attributes)
+						SetItemDir(fileInfo.FullName);
 				}
 				if (_flagRecursive)
 					foreach (DirectoryInfo directoryInfo in dir.GetDirectories())
 					{
-						FindInDir(directoryInfo, pattern, flagForFind, true);
+						FindInDir(directoryInfo, pattern, flagForFind, true, attributes);
 					}
 			}
 			else
@@ -96,14 +102,17 @@ namespace FindFilesApplication
 					string[] textFromFile = File.ReadAllLines(fileInfo.FullName, Encoding.Default);
 					foreach (string s in textFromFile)
 					{
-						if (s.Contains(tbox_TextForFind.Text))
-							SetItemDir(fileInfo.FullName);
+						if ((fileInfo.Attributes & attributes) == attributes)
+						{
+							if (s.Contains(tbox_TextForFind.Text))
+								SetItemDir(fileInfo.FullName);
+						}
 					}
 				}
 				if (_flagRecursive)
 					foreach (DirectoryInfo directoryInfo in dir.GetDirectories())
 					{
-						FindInDir(directoryInfo, pattern, flagForFind, true);
+						FindInDir(directoryInfo, pattern, flagForFind, true, attributes);
 					}
 			}
 		}
@@ -211,6 +220,9 @@ namespace FindFilesApplication
 					key.SetValue("FileForFind", tbox_FileForFind.Text, RegistryValueKind.String);
 					key.SetValue("TextForFind", tbox_TextForFind.Text, RegistryValueKind.String);
 					key.SetValue("FlagRecursive", flagRecursive.Checked ? 1 : 0, RegistryValueKind.DWord);
+					key.SetValue("FlagSystem", chb_System.Checked ? 1 : 0, RegistryValueKind.DWord);
+					key.SetValue("FlagArchive", chb_Arch.Checked ? 1 : 0, RegistryValueKind.DWord);
+					key.SetValue("FlagHidden", chb_Hidden.Checked ? 1 : 0, RegistryValueKind.DWord);
 				}
 			}
 		}
@@ -224,6 +236,21 @@ namespace FindFilesApplication
 			{
 				var flRc = (int)key.GetValue("FlagRecursive", 0);
 				flagRecursive.Checked = (flRc == 1);
+			}
+			if (key != null)
+			{
+				var flSys = (int)key.GetValue("FlagSystem", 0);
+				chb_System.Checked = (flSys == 1);
+			}
+			if (key != null)
+			{
+				var flArch = (int)key.GetValue("FlagArchive", 0);
+				chb_Arch.Checked = (flArch == 1);
+			}
+			if (key != null)
+			{
+				var flHidden = (int)key.GetValue("FlagHidden", 0);
+				chb_Hidden.Checked = (flHidden == 1);
 			}
 			if (key != null)
 			{

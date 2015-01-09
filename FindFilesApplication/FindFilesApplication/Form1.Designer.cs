@@ -49,6 +49,9 @@
 			this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
 			this.timer1 = new System.Windows.Forms.Timer(this.components);
 			this.lbl_Time = new System.Windows.Forms.Label();
+			this.chb_Hidden = new System.Windows.Forms.CheckBox();
+			this.chb_System = new System.Windows.Forms.CheckBox();
+			this.chb_Arch = new System.Windows.Forms.CheckBox();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -228,11 +231,47 @@
 			this.lbl_Time.TabIndex = 21;
 			this.lbl_Time.Text = "00:00:00";
 			// 
+			// chb_Hidden
+			// 
+			this.chb_Hidden.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.chb_Hidden.AutoSize = true;
+			this.chb_Hidden.Location = new System.Drawing.Point(436, 152);
+			this.chb_Hidden.Name = "chb_Hidden";
+			this.chb_Hidden.Size = new System.Drawing.Size(72, 17);
+			this.chb_Hidden.TabIndex = 22;
+			this.chb_Hidden.Text = "Скрытый";
+			this.chb_Hidden.UseVisualStyleBackColor = true;
+			// 
+			// chb_System
+			// 
+			this.chb_System.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.chb_System.AutoSize = true;
+			this.chb_System.Location = new System.Drawing.Point(264, 152);
+			this.chb_System.Name = "chb_System";
+			this.chb_System.Size = new System.Drawing.Size(84, 17);
+			this.chb_System.TabIndex = 23;
+			this.chb_System.Text = "Системный";
+			this.chb_System.UseVisualStyleBackColor = true;
+			// 
+			// chb_Arch
+			// 
+			this.chb_Arch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.chb_Arch.AutoSize = true;
+			this.chb_Arch.Location = new System.Drawing.Point(354, 152);
+			this.chb_Arch.Name = "chb_Arch";
+			this.chb_Arch.Size = new System.Drawing.Size(76, 17);
+			this.chb_Arch.TabIndex = 24;
+			this.chb_Arch.Text = "Архивный";
+			this.chb_Arch.UseVisualStyleBackColor = true;
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(529, 505);
+			this.Controls.Add(this.chb_Arch);
+			this.Controls.Add(this.chb_System);
+			this.Controls.Add(this.chb_Hidden);
 			this.Controls.Add(this.lbl_Time);
 			this.Controls.Add(this.btn_SaveResult);
 			this.Controls.Add(this.lbl_Count);
@@ -280,6 +319,9 @@
 		private System.Windows.Forms.SaveFileDialog saveFileDialog1;
 		private System.Windows.Forms.Timer timer1;
 		private System.Windows.Forms.Label lbl_Time;
+		private System.Windows.Forms.CheckBox chb_Hidden;
+		private System.Windows.Forms.CheckBox chb_System;
+		private System.Windows.Forms.CheckBox chb_Arch;
     }
 }
 
