@@ -37,8 +37,7 @@ namespace FindFilesApplication
 		{
 			btn_Clear_Click(sender, e);
 			_timeStart = DateTime.Now;
-			ThreadStart threadFind = Finding;
-			_thread = new Thread(threadFind);
+			_thread = new Thread(Finding);
 			_thread.Start();
 		}
 
@@ -72,7 +71,7 @@ namespace FindFilesApplication
 
 		int _i;
 // ReSharper disable once InconsistentNaming
-		public void FindInDir(DirectoryInfo dir, string pattern, TypeForFind flagForFind, bool _flagRecursive, FileAttributes attributes)
+		public void FindInDir(DirectoryInfo dir, string pattern, TypeForFind flagForFind, bool flagRecurs, FileAttributes attributes)
 		{
 			if (flagForFind == TypeForFind.FindFile)
 			{
@@ -86,7 +85,7 @@ namespace FindFilesApplication
 					if ((fileInfo.Attributes & attributes) == attributes)
 						SetItemDir(fileInfo.FullName);
 				}
-				if (_flagRecursive)
+				if (flagRecurs)
 					foreach (DirectoryInfo directoryInfo in dir.GetDirectories())
 					{
 						FindInDir(directoryInfo, pattern, flagForFind, true, attributes);
@@ -110,7 +109,7 @@ namespace FindFilesApplication
 						}
 					}
 				}
-				if (_flagRecursive)
+				if (flagRecurs)
 					foreach (DirectoryInfo directoryInfo in dir.GetDirectories())
 					{
 						FindInDir(directoryInfo, pattern, flagForFind, true, attributes);
