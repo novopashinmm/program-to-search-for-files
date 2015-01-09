@@ -102,11 +102,11 @@
 			// label3
 			// 
 			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(21, 10);
+			this.label3.Location = new System.Drawing.Point(9, 10);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(71, 13);
+			this.label3.Size = new System.Drawing.Size(122, 13);
 			this.label3.TabIndex = 9;
-			this.label3.Text = "StartDirectory";
+			this.label3.Text = "Стартовая директория";
 			// 
 			// tbox_FileForFind
 			// 
@@ -120,11 +120,11 @@
 			// label4
 			// 
 			this.label4.AutoSize = true;
-			this.label4.Location = new System.Drawing.Point(21, 54);
+			this.label4.Location = new System.Drawing.Point(9, 54);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(58, 13);
+			this.label4.Size = new System.Drawing.Size(96, 13);
 			this.label4.TabIndex = 11;
-			this.label4.Text = "FileForFind";
+			this.label4.Text = "Файл для поиска";
 			// 
 			// btn_Clear
 			// 
@@ -149,11 +149,11 @@
 			// label5
 			// 
 			this.label5.AutoSize = true;
-			this.label5.Location = new System.Drawing.Point(21, 93);
+			this.label5.Location = new System.Drawing.Point(9, 93);
 			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(63, 13);
+			this.label5.Size = new System.Drawing.Size(97, 13);
 			this.label5.TabIndex = 14;
-			this.label5.Text = "TextForFind";
+			this.label5.Text = "Текст для поиска";
 			// 
 			// flagRecursive
 			// 

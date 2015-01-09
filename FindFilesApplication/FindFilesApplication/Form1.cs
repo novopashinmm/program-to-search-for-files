@@ -35,6 +35,7 @@ namespace FindFilesApplication
 
 		private void btn_Find_Click(object sender, EventArgs e)
 		{
+			btn_Clear_Click(sender, e);
 			_timeStart = DateTime.Now;
 			ThreadStart threadFind = Finding;
 			_thread = new Thread(threadFind);
