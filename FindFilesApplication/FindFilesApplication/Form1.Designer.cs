@@ -52,6 +52,7 @@
 			this.chb_Hidden = new System.Windows.Forms.CheckBox();
 			this.chb_System = new System.Windows.Forms.CheckBox();
 			this.chb_Arch = new System.Windows.Forms.CheckBox();
+			this.chb_SaveResultPoisk = new System.Windows.Forms.CheckBox();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -264,11 +265,25 @@
 			this.chb_Arch.Text = "Архивный";
 			this.chb_Arch.UseVisualStyleBackColor = true;
 			// 
+			// chb_SaveResultPoisk
+			// 
+			this.chb_SaveResultPoisk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.chb_SaveResultPoisk.AutoSize = true;
+			this.chb_SaveResultPoisk.Checked = true;
+			this.chb_SaveResultPoisk.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.chb_SaveResultPoisk.Location = new System.Drawing.Point(122, 154);
+			this.chb_SaveResultPoisk.Name = "chb_SaveResultPoisk";
+			this.chb_SaveResultPoisk.Size = new System.Drawing.Size(122, 17);
+			this.chb_SaveResultPoisk.TabIndex = 25;
+			this.chb_SaveResultPoisk.Text = "Сохр. пред. поиска";
+			this.chb_SaveResultPoisk.UseVisualStyleBackColor = true;
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(529, 505);
+			this.Controls.Add(this.chb_SaveResultPoisk);
 			this.Controls.Add(this.chb_Arch);
 			this.Controls.Add(this.chb_System);
 			this.Controls.Add(this.chb_Hidden);
@@ -322,6 +337,7 @@
 		private System.Windows.Forms.CheckBox chb_Hidden;
 		private System.Windows.Forms.CheckBox chb_System;
 		private System.Windows.Forms.CheckBox chb_Arch;
+		private System.Windows.Forms.CheckBox chb_SaveResultPoisk;
     }
 }
 

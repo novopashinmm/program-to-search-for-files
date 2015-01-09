@@ -35,7 +35,10 @@ namespace FindFilesApplication
 
 		private void btn_Find_Click(object sender, EventArgs e)
 		{
-			btn_Clear_Click(sender, e);
+			if (!chb_SaveResultPoisk.Checked)
+			{
+				btn_Clear_Click(sender, e);
+			}
 			_timeStart = DateTime.Now;
 			_thread = new Thread(Finding);
 			_thread.Start();
