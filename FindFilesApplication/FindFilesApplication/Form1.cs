@@ -17,7 +17,8 @@ namespace FindFilesApplication
 
 	public partial class Form1 : Form
 	{
-		public Thread Thread;
+		private Thread _thread;
+		private DateTime _timeStart;
 
 		public Form1()
 		{
@@ -34,9 +35,10 @@ namespace FindFilesApplication
 
 		private void btn_Find_Click(object sender, EventArgs e)
 		{
+			_timeStart = DateTime.Now;
 			ThreadStart threadFind = Finding;
-			Thread = new Thread(threadFind);
-			Thread.Start();
+			_thread = new Thread(threadFind);
+			_thread.Start();
 		}
 
 		private void Finding()
@@ -72,6 +74,7 @@ namespace FindFilesApplication
 				foreach (FileInfo fileInfo in dir.GetFiles(pattern))
 				{
 					_i++;
+					SetTime(_timeStart);
 					SetCountDir(_i);
 					SetCurrentDir(fileInfo.FullName);
 					SetItemDir(fileInfo.FullName);
@@ -87,6 +90,7 @@ namespace FindFilesApplication
 				foreach (FileInfo fileInfo in dir.GetFiles(pattern))
 				{
 					_i++;
+					SetTime(_timeStart);
 					SetCountDir(_i);
 					SetCurrentDir(fileInfo.FullName);
 					string[] textFromFile = File.ReadAllLines(fileInfo.FullName, Encoding.Default);
@@ -102,14 +106,14 @@ namespace FindFilesApplication
 						FindInDir(directoryInfo, pattern, flagForFind, true);
 					}
 			}
-			SetCurrentDir("");
 		}
 
 		private void btn_Clear_Click(object sender, EventArgs e)
 		{
 			lbox_Result.Items.Clear();
-			lbl_Count.Text = "";
+			lbl_Count.Text = @"0";
 			_i = 0;
+			lbl_Time.Text = @"00:00:00";
 		}
 
 		private void lbox_Result_DoubleClick(object sender, EventArgs e)
@@ -121,7 +125,7 @@ namespace FindFilesApplication
 		{
 			try
 			{
-				Thread.Abort();
+				_thread.Abort();
 			}
 			catch (ThreadAbortException)
 			{
@@ -153,6 +157,16 @@ namespace FindFilesApplication
 			else
 				Invoke(new SetItemDelegate(SetItemDir), new[] { fileinfo });
 		}
+
+		private void SetTime(DateTime start)
+		{
+			if (!InvokeRequired)
+				lbl_Time.Text = (DateTime.Now - start).ToString();
+			else
+				Invoke(new SetTimeDelegate(SetTime), new object[] { start });
+		}
+
+		private delegate void SetTimeDelegate(DateTime start);
 
 		private delegate void SetCountDelegate(int parameter);
 
@@ -191,29 +205,41 @@ namespace FindFilesApplication
 		{
 			using (RegistryKey key = Registry.CurrentUser.OpenSubKey("Software\\AppFind", true))
 			{
-				key.SetValue("StartDirectory", tbox_StartDir.Text, RegistryValueKind.String);
-				key.SetValue("FileForFind", tbox_FileForFind.Text, RegistryValueKind.String);
-				key.SetValue("TextForFind", tbox_TextForFind.Text, RegistryValueKind.String);
-				key.SetValue("FlagRecursive", flagRecursive.Checked ? 1 : 0, RegistryValueKind.DWord);
+				if (key != null)
+				{
+					key.SetValue("StartDirectory", tbox_StartDir.Text, RegistryValueKind.String);
+					key.SetValue("FileForFind", tbox_FileForFind.Text, RegistryValueKind.String);
+					key.SetValue("TextForFind", tbox_TextForFind.Text, RegistryValueKind.String);
+					key.SetValue("FlagRecursive", flagRecursive.Checked ? 1 : 0, RegistryValueKind.DWord);
+				}
 			}
 		}
 
 		private void Form1_Load(object sender, EventArgs e)
 		{
-			RegistryKey key = Registry.CurrentUser.OpenSubKey("Software\\AppFind");
-			if (key == null)
-			{
-				key = Registry.CurrentUser.CreateSubKey("Software\\AppFind");
-			}
+			RegistryKey key = Registry.CurrentUser.OpenSubKey("Software\\AppFind") ??
+			                  Registry.CurrentUser.CreateSubKey("Software\\AppFind");
 
-			int flRc = (int)key.GetValue("FlagRecursive", 0);
-			flagRecursive.Checked = (flRc == 1);
-			string TxFrFn = (string)key.GetValue("TextForFind");
-			tbox_TextForFind.Text = TxFrFn;
-			string FlFrFn = (string)key.GetValue("FileForFind");
-			tbox_FileForFind.Text = FlFrFn;
-			string StDr = (string)key.GetValue("StartDirectory");
-			tbox_StartDir.Text = StDr;
+			if (key != null)
+			{
+				var flRc = (int)key.GetValue("FlagRecursive", 0);
+				flagRecursive.Checked = (flRc == 1);
+			}
+			if (key != null)
+			{
+				var txFrFn = (string)key.GetValue("TextForFind");
+				tbox_TextForFind.Text = txFrFn;
+			}
+			if (key != null)
+			{
+				var flFrFn = (string) key.GetValue("FileForFind");
+				tbox_FileForFind.Text = flFrFn;
+			}
+			if (key != null)
+			{
+				var stDr = (string) key.GetValue("StartDirectory");
+				tbox_StartDir.Text = stDr;
+			}
 		}
 		#endregion
 	}

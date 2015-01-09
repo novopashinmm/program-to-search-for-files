@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+			this.components = new System.ComponentModel.Container();
 			this.tbox_StartDir = new System.Windows.Forms.TextBox();
 			this.btn_Explorer = new System.Windows.Forms.Button();
 			this.btn_Find = new System.Windows.Forms.Button();
@@ -46,6 +47,8 @@
 			this.lbl_Count = new System.Windows.Forms.Label();
 			this.btn_SaveResult = new System.Windows.Forms.Button();
 			this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+			this.timer1 = new System.Windows.Forms.Timer(this.components);
+			this.lbl_Time = new System.Windows.Forms.Label();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -201,8 +204,9 @@
 			this.lbl_Count.AutoSize = true;
 			this.lbl_Count.Location = new System.Drawing.Point(15, 155);
 			this.lbl_Count.Name = "lbl_Count";
-			this.lbl_Count.Size = new System.Drawing.Size(0, 13);
+			this.lbl_Count.Size = new System.Drawing.Size(13, 13);
 			this.lbl_Count.TabIndex = 19;
+			this.lbl_Count.Text = "0";
 			// 
 			// btn_SaveResult
 			// 
@@ -215,11 +219,21 @@
 			this.btn_SaveResult.UseVisualStyleBackColor = true;
 			this.btn_SaveResult.Click += new System.EventHandler(this.btn_SaveResult_Click);
 			// 
+			// lbl_Time
+			// 
+			this.lbl_Time.AutoSize = true;
+			this.lbl_Time.Location = new System.Drawing.Point(56, 156);
+			this.lbl_Time.Name = "lbl_Time";
+			this.lbl_Time.Size = new System.Drawing.Size(49, 13);
+			this.lbl_Time.TabIndex = 21;
+			this.lbl_Time.Text = "00:00:00";
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(529, 505);
+			this.Controls.Add(this.lbl_Time);
 			this.Controls.Add(this.btn_SaveResult);
 			this.Controls.Add(this.lbl_Count);
 			this.Controls.Add(this.lbl_CurrentDirectory);
@@ -264,6 +278,8 @@
 		private System.Windows.Forms.Label lbl_Count;
 		private System.Windows.Forms.Button btn_SaveResult;
 		private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+		private System.Windows.Forms.Timer timer1;
+		private System.Windows.Forms.Label lbl_Time;
     }
 }
 
