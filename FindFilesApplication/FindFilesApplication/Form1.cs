@@ -99,11 +99,12 @@ namespace FindFilesApplication
 					SetTime(_timeStart);
 					SetCountDir(_i);
 					SetCurrentDir(fileInfo.FullName);
-					string[] textFromFile = File.ReadAllLines(fileInfo.FullName, Encoding.Default);
-					foreach (string s in textFromFile)
+					if ((fileInfo.Attributes & attributes) == attributes)
 					{
-						if ((fileInfo.Attributes & attributes) == attributes)
+						string[] textFromFile = File.ReadAllLines(fileInfo.FullName, Encoding.Default);
+						foreach (string s in textFromFile)
 						{
+
 							if (s.Contains(tbox_TextForFind.Text))
 								SetItemDir(fileInfo.FullName);
 						}
