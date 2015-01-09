@@ -1,5 +1,5 @@
 # program-to-search-for-files
-First commit
+
 Внимание! Прежде чем запускать программу нужно зайти в редактор реестра и добавить
 HKEY_CURRENT_USER->Software-> дирректорию AppFind
 
