@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
@@ -10,13 +9,10 @@ using Microsoft.Win32;
 
 namespace FindFilesApplication
 {
-	
 	public partial class Form1 : Form
 	{
 		private Thread _thread;
 		private DateTime _timeStart;
-
-		
 
 		public enum TypeForFind
 		{
@@ -76,114 +72,53 @@ namespace FindFilesApplication
 			}
 		}
 
-		private void tw_Result_BeforeExpand(object sender, TreeViewCancelEventArgs e)
-		{
-			//if (e.Node.Tag != null)
-			//{
-			//	AddDirectoriesAndFindFiles(e.Node, (string)e.Node.Tag);
-			//}
-		}
-
-		private void AddDirectoriesAndFindFiles(TreeNode node, string path)
-		{
-			ClearTreeViewResultDir(node); // clear dummy node if exists
-
-			try
-			{
-				DirectoryInfo currentDir = new DirectoryInfo(path);
-				DirectoryInfo[] subdirs = currentDir.GetDirectories();
-
-				foreach (DirectoryInfo subdir in subdirs)
-				{
-					TreeNode child = new TreeNode(subdir.Name);
-					child.Tag = subdir.FullName; // save full path in tag
-					// TODO: Use some image for the node to show its a music file
-
-					child.Nodes.Add(new TreeNode()); // add dummy node to allow expansion
-					//node.Nodes.Add(child);
-					SetTreeViewResultDir(child, node);
-					AddDirectoriesAndFindFiles(child, (string) child.Tag);
-				}
-
-				List<FileInfo> files = new List<FileInfo>();
-				files.AddRange(currentDir.GetFiles(tbox_FileForFind.Text));
-				
-
-				foreach (FileInfo file in files)
-				{
-					TreeNode child = new TreeNode(file.Name);
-					// TODO: Use some image for the node to show its a music file
-
-					child.Tag = file; // save full path for later use
-					//node.Nodes.Add(child);
-					SetTreeViewResultDir(child, node);
-				}
-
-			}
-			catch
-			{ // try to handle use each exception separately
-			}
-			finally
-			{
-				node.Tag = null; // clear tag
-			}
-		}
-
-
 		int _i;
 // ReSharper disable once InconsistentNaming
 		public void FindInDir(DirectoryInfo dir, string pattern, TypeForFind flagForFind, bool flagRecurs, FileAttributes attributes)
 		{
-			TreeNode root = new TreeNode(dir.Name);
-			root.Tag = dir.ToString();
-			root.Nodes.Add(new TreeNode());
-			SetStartTreeViewResultDir(root);
-			AddDirectoriesAndFindFiles(root, (string)root.Tag);
-			//if (flagForFind == TypeForFind.FindFile)
-			//{
-			//	foreach (FileInfo fileInfo in dir.GetFiles(pattern))
-			//	{
-			//		//MessageBox.Show(fileInfo.Attributes.ToString());
-			//		_i++;
-			//		SetTime(_timeStart);
-			//		SetCountDir(_i);
-			//		SetCurrentDir(fileInfo.FullName);
-			//		if ((fileInfo.Attributes & attributes) == attributes)
-			//		{
-			//			SetItemDir(fileInfo.FullName);
-			//		}
-			//	}
-			//	if (flagRecurs)
-			//		foreach (DirectoryInfo directoryInfo in dir.GetDirectories())
-			//		{
-			//			FindInDir(directoryInfo, pattern, flagForFind, true, attributes);
-			//		}
-			//}
-			//else
-			//{
-			//	foreach (FileInfo fileInfo in dir.GetFiles(pattern))
-			//	{
-			//		_i++;
-			//		SetTime(_timeStart);
-			//		SetCountDir(_i);
-			//		SetCurrentDir(fileInfo.FullName);
-			//		if ((fileInfo.Attributes & attributes) == attributes)
-			//		{
-			//			string[] textFromFile = File.ReadAllLines(fileInfo.FullName, Encoding.Default);
-			//			foreach (string s in textFromFile)
-			//			{
+			if (flagForFind == TypeForFind.FindFile)
+			{
+				foreach (FileInfo fileInfo in dir.GetFiles(pattern))
+				{
+					//MessageBox.Show(fileInfo.Attributes.ToString());
+					_i++;
+					SetTime(_timeStart);
+					SetCountDir(_i);
+					SetCurrentDir(fileInfo.FullName);
+					if ((fileInfo.Attributes & attributes) == attributes)
+						SetItemDir(fileInfo.FullName);
+				}
+				if (flagRecurs)
+					foreach (DirectoryInfo directoryInfo in dir.GetDirectories())
+					{
+						FindInDir(directoryInfo, pattern, flagForFind, true, attributes);
+					}
+			}
+			else
+			{
+				foreach (FileInfo fileInfo in dir.GetFiles(pattern))
+				{
+					_i++;
+					SetTime(_timeStart);
+					SetCountDir(_i);
+					SetCurrentDir(fileInfo.FullName);
+					if ((fileInfo.Attributes & attributes) == attributes)
+					{
+						string[] textFromFile = File.ReadAllLines(fileInfo.FullName, Encoding.Default);
+						foreach (string s in textFromFile)
+						{
 
-			//				if (s.Contains(tbox_TextForFind.Text))
-			//					SetItemDir(fileInfo.FullName);
-			//			}
-			//		}
-			//	}
-			//if (flagRecurs)
-			//	foreach (DirectoryInfo directoryInfo in dir.GetDirectories())
-			//	{
-			//		FindInDir(directoryInfo, pattern, flagForFind, true, attributes);
-			//	}
-			//}
+							if (s.Contains(tbox_TextForFind.Text))
+								SetItemDir(fileInfo.FullName);
+						}
+					}
+				}
+				if (flagRecurs)
+					foreach (DirectoryInfo directoryInfo in dir.GetDirectories())
+					{
+						FindInDir(directoryInfo, pattern, flagForFind, true, attributes);
+					}
+			}
 		}
 
 		private void btn_Clear_Click(object sender, EventArgs e)
@@ -243,36 +178,6 @@ namespace FindFilesApplication
 			else
 				Invoke(new SetTimeDelegate(SetTime), new object[] { start });
 		}
-
-        private void SetTreeViewResultDir(TreeNode child, TreeNode node)
-        {
-            if (!InvokeRequired)
-                node.Nodes.Add(child);
-            else
-                Invoke(new SettwResultDelegate(SetTreeViewResultDir), new object[] { child, node });
-        }
-
-		private void ClearTreeViewResultDir(TreeNode node)
-		{
-			if (!InvokeRequired)
-				node.Nodes.Clear();
-			else
-				Invoke(new CleartwResultDelegate(ClearTreeViewResultDir), new object[] { node });
-		}
-
-		private void SetStartTreeViewResultDir(TreeNode node)
-		{
-			if (!InvokeRequired)
-				tw_Result.Nodes.Add(node);
-			else
-				Invoke(new SetStarttwResultDelegate(SetStartTreeViewResultDir), new object[] { node });
-		}
-
-		private delegate void SetStarttwResultDelegate(TreeNode node);
-
-		private delegate void CleartwResultDelegate(TreeNode parameter);
-
-        private delegate void SettwResultDelegate(TreeNode child, TreeNode node);
 
 		private delegate void SetTimeDelegate(DateTime start);
 
@@ -374,7 +279,5 @@ namespace FindFilesApplication
 			}
 		}
 		#endregion
-
-		
 	}
 }

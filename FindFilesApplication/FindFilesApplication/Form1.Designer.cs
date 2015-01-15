@@ -55,7 +55,6 @@
 			this.chb_Arch = new System.Windows.Forms.CheckBox();
 			this.chb_SaveResultPoisk = new System.Windows.Forms.CheckBox();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-			this.tw_Result = new System.Windows.Forms.TreeView();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.SuspendLayout();
@@ -98,7 +97,7 @@
 			this.lbox_Result.FormattingEnabled = true;
 			this.lbox_Result.Location = new System.Drawing.Point(0, 233);
 			this.lbox_Result.Name = "lbox_Result";
-			this.lbox_Result.Size = new System.Drawing.Size(801, 56);
+			this.lbox_Result.Size = new System.Drawing.Size(801, 212);
 			this.lbox_Result.TabIndex = 8;
 			this.lbox_Result.DoubleClick += new System.EventHandler(this.lbox_Result_DoubleClick);
 			// 
@@ -294,20 +293,11 @@
 			this.tableLayoutPanel2.Size = new System.Drawing.Size(801, 18);
 			this.tableLayoutPanel2.TabIndex = 26;
 			// 
-			// tw_Result
-			// 
-			this.tw_Result.Location = new System.Drawing.Point(0, 295);
-			this.tw_Result.Name = "tw_Result";
-			this.tw_Result.Size = new System.Drawing.Size(801, 150);
-			this.tw_Result.TabIndex = 27;
-			this.tw_Result.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.tw_Result_BeforeExpand);
-			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(803, 471);
-			this.Controls.Add(this.tw_Result);
 			this.Controls.Add(this.tableLayoutPanel2);
 			this.Controls.Add(this.chb_SaveResultPoisk);
 			this.Controls.Add(this.chb_Arch);
@@ -365,7 +355,6 @@
 		private System.Windows.Forms.CheckBox chb_Arch;
 		private System.Windows.Forms.CheckBox chb_SaveResultPoisk;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-        private System.Windows.Forms.TreeView tw_Result;
     }
 }
 
