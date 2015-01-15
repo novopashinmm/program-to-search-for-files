@@ -13,6 +13,7 @@ namespace FindFilesApplication
 	{
 		private Thread _thread;
 		private DateTime _timeStart;
+		string _substringDirectory;
 
 		public enum TypeForFind
 		{
@@ -44,6 +45,8 @@ namespace FindFilesApplication
 			_thread.Start();
 		}
 
+
+
 		private void Finding()
 		{
 			try
@@ -59,8 +62,14 @@ namespace FindFilesApplication
 								 (chb_Hidden.Checked ? FileAttributes.Hidden : 0);
 
 				var dir = new DirectoryInfo(tbox_StartDir.Text);
-				string file = tbox_FileForFind.Text;
-				FindInDir(dir, file, flagForFind, flagRecursive.Checked, attributes);
+				string pattern = tbox_FileForFind.Text;
+
+				FindInDir(dir, pattern, flagForFind, flagRecursive.Checked, attributes);
+
+				ClearTwResult(tw_Result);
+				String path = tbox_StartDir.Text;
+				AddTwResult(tw_Result, path); //tw_Result.Nodes.Add(path);
+				PopulateTreeView(path, tw_Result.Nodes[0], pattern);
 			}
 			catch (ThreadAbortException)
 			{
@@ -71,6 +80,47 @@ namespace FindFilesApplication
 				MessageBox.Show(ex.ToString());
 			}
 		}
+
+		public void PopulateTreeView(string directoryValue, TreeNode parentNode, string pattern)
+		{
+			string[] directoryArray =
+			 Directory.GetDirectories(directoryValue);
+
+			var currentDirectory = new DirectoryInfo(directoryValue);
+
+			try
+			{
+				if (currentDirectory.GetFiles(pattern).Length != 0)
+				{
+					foreach (var file in currentDirectory.GetFiles(pattern))
+					{
+						AddTwResultTreeNode(parentNode, file.FullName); //parentNode.Nodes.Add(file.FullName);
+					}
+				}
+
+				if (directoryArray.Length != 0)
+				{
+					foreach (string directory in directoryArray)
+					{
+						_substringDirectory = directory.Substring(
+						directory.LastIndexOf('\\') + 1,
+						directory.Length - directory.LastIndexOf('\\') - 1);
+
+						var myNode = new TreeNode(_substringDirectory);
+
+						if (Directory.GetFiles(directory, pattern, SearchOption.AllDirectories).Length != 0)
+							AddTwResultTreeNode(parentNode, myNode);//parentNode.Nodes.Add(myNode);
+
+						PopulateTreeView(directory, myNode, pattern);
+					}
+				}
+			}
+			catch (UnauthorizedAccessException)
+			{
+				parentNode.Nodes.Add("Access denied");
+			} // end catch
+		}
+
 
 		int _i;
 // ReSharper disable once InconsistentNaming
@@ -124,6 +174,7 @@ namespace FindFilesApplication
 		private void btn_Clear_Click(object sender, EventArgs e)
 		{
 			lbox_Result.Items.Clear();
+			tw_Result.Nodes.Clear();
 			lbl_Count.Text = @"0";
 			_i = 0;
 			lbl_Time.Text = @"00:00:00";
@@ -178,6 +229,42 @@ namespace FindFilesApplication
 			else
 				Invoke(new SetTimeDelegate(SetTime), new object[] { start });
 		}
+
+		private void ClearTwResult(TreeView node)
+		{
+			if (!InvokeRequired)
+				node.Nodes.Clear();
+			else if (node != null) Invoke(new ClearTwResultDelegate(ClearTwResult), new object[] { node });
+		}
+
+		private void AddTwResult(TreeView node, string path)
+		{
+			if (!InvokeRequired)
+				node.Nodes.Add(path);
+			else if (node != null) Invoke(new AddTwResultDelegate(AddTwResult), new object[] { node, path });
+		}
+
+		private void AddTwResultTreeNode(TreeNode node, string path)
+		{
+			if (!InvokeRequired)
+				node.Nodes.Add(path);
+			else if (node != null) Invoke(new AddTwResultDelegateTreeNode(AddTwResultTreeNode), new object[] { node, path });
+		}
+
+		private void AddTwResultTreeNode(TreeNode node, TreeNode childnode)
+		{
+			if (!InvokeRequired)
+				node.Nodes.Add(childnode);
+			else if (node != null) Invoke(new AddTwResultDelegateTreeNodeReloadChildNode(AddTwResultTreeNode), new object[] { node, childnode });
+		}
+
+		private delegate void AddTwResultDelegateTreeNodeReloadChildNode(TreeNode node, TreeNode childnode);
+
+		private delegate void AddTwResultDelegateTreeNode(TreeNode node, string path);
+
+		private delegate void AddTwResultDelegate(TreeView node, string path);
+
+		private delegate void ClearTwResultDelegate(TreeView node);
 
 		private delegate void SetTimeDelegate(DateTime start);
 

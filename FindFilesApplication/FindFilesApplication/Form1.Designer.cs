@@ -55,8 +55,11 @@
 			this.chb_Arch = new System.Windows.Forms.CheckBox();
 			this.chb_SaveResultPoisk = new System.Windows.Forms.CheckBox();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+			this.tw_Result = new System.Windows.Forms.TreeView();
+			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
+			this.tableLayoutPanel3.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tbox_StartDir
@@ -95,9 +98,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.lbox_Result.FormattingEnabled = true;
-			this.lbox_Result.Location = new System.Drawing.Point(0, 233);
+			this.lbox_Result.Location = new System.Drawing.Point(3, 3);
 			this.lbox_Result.Name = "lbox_Result";
-			this.lbox_Result.Size = new System.Drawing.Size(801, 212);
+			this.lbox_Result.Size = new System.Drawing.Size(773, 108);
 			this.lbox_Result.TabIndex = 8;
 			this.lbox_Result.DoubleClick += new System.EventHandler(this.lbox_Result_DoubleClick);
 			// 
@@ -293,11 +296,39 @@
 			this.tableLayoutPanel2.Size = new System.Drawing.Size(801, 18);
 			this.tableLayoutPanel2.TabIndex = 26;
 			// 
+			// tw_Result
+			// 
+			this.tw_Result.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.tw_Result.Location = new System.Drawing.Point(3, 124);
+			this.tw_Result.Name = "tw_Result";
+			this.tw_Result.Size = new System.Drawing.Size(773, 94);
+			this.tw_Result.TabIndex = 27;
+			// 
+			// tableLayoutPanel3
+			// 
+			this.tableLayoutPanel3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.tableLayoutPanel3.ColumnCount = 1;
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel3.Controls.Add(this.lbox_Result, 0, 0);
+			this.tableLayoutPanel3.Controls.Add(this.tw_Result, 0, 1);
+			this.tableLayoutPanel3.Location = new System.Drawing.Point(12, 224);
+			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+			this.tableLayoutPanel3.RowCount = 2;
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 54.75113F));
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 45.24887F));
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(779, 221);
+			this.tableLayoutPanel3.TabIndex = 28;
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(803, 471);
+			this.Controls.Add(this.tableLayoutPanel3);
 			this.Controls.Add(this.tableLayoutPanel2);
 			this.Controls.Add(this.chb_SaveResultPoisk);
 			this.Controls.Add(this.chb_Arch);
@@ -312,7 +343,6 @@
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.tbox_FileForFind);
 			this.Controls.Add(this.label3);
-			this.Controls.Add(this.lbox_Result);
 			this.Controls.Add(this.btn_Explorer);
 			this.Controls.Add(this.tbox_StartDir);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -323,6 +353,7 @@
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.tableLayoutPanel2.PerformLayout();
+			this.tableLayoutPanel3.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -355,6 +386,8 @@
 		private System.Windows.Forms.CheckBox chb_Arch;
 		private System.Windows.Forms.CheckBox chb_SaveResultPoisk;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+		private System.Windows.Forms.TreeView tw_Result;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
     }
 }
 
