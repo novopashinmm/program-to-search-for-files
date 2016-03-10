@@ -11,21 +11,35 @@ namespace FindFilesApplication
 {
 	public partial class Form1 : Form
 	{
+        // Поток
 		private Thread _thread;
+
+        // Дата начала
 		private DateTime _timeStart;
+
+        // Директория поиска
 		string _substringDirectory;
 
+        // Тип поиска, файлы или текст
 		public enum TypeForFind
 		{
 			FindFile,
 			FindText
 		}
 
+	    public enum Recursive
+	    {
+	        IsRecursive,
+            NotRecursive
+	    }
+
+        // Конструктор
 		public Form1()
 		{
 			InitializeComponent();
 		}
 
+        // Выбор директории в обозревателе
 		private void btn_Explorer_Click(object sender, EventArgs e)
 		{
 			if (fbd_StartDialog.ShowDialog() == DialogResult.OK)
@@ -34,6 +48,7 @@ namespace FindFilesApplication
 			}
 		}
 
+        // Обработка события поиска
 		private void btn_Find_Click(object sender, EventArgs e)
 		{
 			if (!chb_SaveResultPoisk.Checked)
@@ -41,13 +56,13 @@ namespace FindFilesApplication
 				btn_Clear_Click(sender, e);
 			}
 			_timeStart = DateTime.Now;
+            SynchronizationContext context = SynchronizationContext.Current;
 			_thread = new Thread(Finding);
-			_thread.Start();
+            _thread.Start(context);
 		}
 
-
-
-		private void Finding()
+        // Операция поиска файлов
+        private void Finding(object state)
 		{
 			try
 			{
@@ -63,12 +78,12 @@ namespace FindFilesApplication
 
 				var dir = new DirectoryInfo(tbox_StartDir.Text);
 				string pattern = tbox_FileForFind.Text;
-
-				FindInDir(dir, pattern, flagForFind, flagRecursive.Checked, attributes);
+                Recursive recursive = flagRecursive.Checked ? Recursive.IsRecursive : Recursive.NotRecursive;
+                FindInDir(dir, pattern, flagForFind, recursive, attributes);
 
 				ClearTwResult(tw_Result);
 				String path = tbox_StartDir.Text;
-				AddTwResult(tw_Result, path); //tw_Result.Nodes.Add(path);
+				AddTwResult(tw_Result, path);
 				PopulateTreeView(path, tw_Result.Nodes[0], pattern);
 			}
 			catch (ThreadAbortException)
@@ -81,6 +96,12 @@ namespace FindFilesApplication
 			}
 		}
 
+        /// <summary>
+        /// Построение TreeView
+        /// </summary>
+        /// <param name="directoryValue"></param>
+        /// <param name="parentNode"></param>
+        /// <param name="pattern"></param>
 		public void PopulateTreeView(string directoryValue, TreeNode parentNode, string pattern)
 		{
 			string[] directoryArray =
@@ -94,7 +115,7 @@ namespace FindFilesApplication
 				{
 					foreach (var file in currentDirectory.GetFiles(pattern))
 					{
-						AddTwResultTreeNode(parentNode, file.FullName); //parentNode.Nodes.Add(file.FullName);
+                        AddTwResult(parentNode, file.FullName); //parentNode.Nodes.Add(file.FullName);
 					}
 				}
 
@@ -109,7 +130,7 @@ namespace FindFilesApplication
 						var myNode = new TreeNode(_substringDirectory);
 
 						if (Directory.GetFiles(directory, pattern, SearchOption.AllDirectories).Length != 0)
-							AddTwResultTreeNode(parentNode, myNode);//parentNode.Nodes.Add(myNode);
+                            AddTwResult(parentNode, myNode);//parentNode.Nodes.Add(myNode);
 
 						PopulateTreeView(directory, myNode, pattern);
 					}
@@ -118,59 +139,71 @@ namespace FindFilesApplication
 			catch (UnauthorizedAccessException)
 			{
 				parentNode.Nodes.Add("Access denied");
-			} // end catch
+			}
 		}
-
 
 		int _i;
-// ReSharper disable once InconsistentNaming
-		public void FindInDir(DirectoryInfo dir, string pattern, TypeForFind flagForFind, bool flagRecurs, FileAttributes attributes)
-		{
-			if (flagForFind == TypeForFind.FindFile)
-			{
-				foreach (FileInfo fileInfo in dir.GetFiles(pattern))
-				{
-					//MessageBox.Show(fileInfo.Attributes.ToString());
-					_i++;
-					SetTime(_timeStart);
-					SetCountDir(_i);
-					SetCurrentDir(fileInfo.FullName);
-					if ((fileInfo.Attributes & attributes) == attributes)
-						SetItemDir(fileInfo.FullName);
-				}
-				if (flagRecurs)
-					foreach (DirectoryInfo directoryInfo in dir.GetDirectories())
-					{
-						FindInDir(directoryInfo, pattern, flagForFind, true, attributes);
-					}
-			}
-			else
-			{
-				foreach (FileInfo fileInfo in dir.GetFiles(pattern))
-				{
-					_i++;
-					SetTime(_timeStart);
-					SetCountDir(_i);
-					SetCurrentDir(fileInfo.FullName);
-					if ((fileInfo.Attributes & attributes) == attributes)
-					{
-						string[] textFromFile = File.ReadAllLines(fileInfo.FullName, Encoding.Default);
-						foreach (string s in textFromFile)
-						{
+        // ReSharper disable once InconsistentNaming
+	    /// <summary>
+	    /// Поиск в заданной директории
+	    /// </summary>
+	    /// <param name="dir"></param>
+	    /// <param name="pattern"></param>
+	    /// <param name="flagForFind"></param>
+	    /// <param name="flagRecurs"></param>
+	    /// <param name="attributes"></param>
+	    public void FindInDir(DirectoryInfo dir, string pattern, TypeForFind flagForFind, Recursive flagRecurs,
+	        FileAttributes attributes)
+	    {
+	        if (flagForFind == TypeForFind.FindFile)
+	        {
+	            foreach (FileInfo fileInfo in dir.GetFiles(pattern))
+	            {
+	                _i++;
+	                SetTime(_timeStart);
+	                SetCountDir(_i);
+	                SetCurrentDir(fileInfo.FullName);
+	                if ((fileInfo.Attributes & attributes) == attributes)
+	                    SetItemDir(fileInfo.FullName);
+	            }
+	            if (flagRecurs == Recursive.IsRecursive)
+	                foreach (DirectoryInfo directoryInfo in dir.GetDirectories())
+	                {
+                        FindInDir(directoryInfo, pattern, flagForFind, Recursive.IsRecursive, attributes);
+	                }
+	        }
+	        else
+	        {
+	            foreach (FileInfo fileInfo in dir.GetFiles(pattern))
+	            {
+	                _i++;
+	                SetTime(_timeStart);
+	                SetCountDir(_i);
+	                SetCurrentDir(fileInfo.FullName);
+	                if ((fileInfo.Attributes & attributes) == attributes)
+	                {
+	                    string[] textFromFile = File.ReadAllLines(fileInfo.FullName, Encoding.Default);
+	                    foreach (string s in textFromFile)
+	                    {
 
-							if (s.Contains(tbox_TextForFind.Text))
-								SetItemDir(fileInfo.FullName);
-						}
-					}
-				}
-				if (flagRecurs)
-					foreach (DirectoryInfo directoryInfo in dir.GetDirectories())
-					{
-						FindInDir(directoryInfo, pattern, flagForFind, true, attributes);
-					}
-			}
-		}
+	                        if (s.Contains(tbox_TextForFind.Text))
+	                            SetItemDir(fileInfo.FullName);
+	                    }
+	                }
+	            }
+	            if (flagRecurs == Recursive.IsRecursive)
+	                foreach (DirectoryInfo directoryInfo in dir.GetDirectories())
+	                {
+                        FindInDir(directoryInfo, pattern, flagForFind, Recursive.IsRecursive, attributes);
+	                }
+	        }
+	    }
 
+	    /// <summary>
+        /// Очистка значений
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
 		private void btn_Clear_Click(object sender, EventArgs e)
 		{
 			lbox_Result.Items.Clear();
@@ -180,11 +213,21 @@ namespace FindFilesApplication
 			lbl_Time.Text = @"00:00:00";
 		}
 
+        /// <summary>
+        /// Открытие файла по двойному щелчку
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
 		private void lbox_Result_DoubleClick(object sender, EventArgs e)
 		{
 			Process.Start(lbox_Result.SelectedItem.ToString());
 		}
 
+        /// <summary>
+        /// Обработка события остановки поиска
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
 		private void btn_StopFind_Click(object sender, EventArgs e)
 		{
 			try
@@ -196,86 +239,55 @@ namespace FindFilesApplication
 				MessageBox.Show(Resources.Form1_btn_StopFind_Click_Поиск_закончен_);
 			}
 		}
-		#region чтобы не обращалось несколько потоков к 1 элементу управления
+
+		#region Установка значений в контроллы
 		private void SetCurrentDir(string currdir)
 		{
-			if (!InvokeRequired)
-				lbl_CurrentDirectory.Text = currdir;
-			else
-				Invoke(new SetStringDelegate(SetCurrentDir), new object[] { currdir });
+            lbl_CurrentDirectory.BeginInvoke(new Action(() => { lbl_CurrentDirectory.Text = currdir; }));
 		}
 
 		private void SetCountDir(int countDir)
 		{
-			if (!InvokeRequired)
-// ReSharper disable once SpecifyACultureInStringConversionExplicitly
-				lbl_Count.Text = countDir.ToString();
-			else
-				Invoke(new SetCountDelegate(SetCountDir), new object[] { countDir });
+            lbl_Count.Invoke(new Action(() => { lbl_Count.Text = countDir.ToString(); }));
 		}
 
 		private void SetItemDir(object fileinfo)
 		{
-			if (!InvokeRequired)
-				lbox_Result.Items.Add(fileinfo);
-			else
-				Invoke(new SetItemDelegate(SetItemDir), new[] { fileinfo });
+            lbox_Result.Invoke(new Action(() => { lbox_Result.Items.Add(fileinfo); }));
 		}
 
-		private void SetTime(DateTime start)
+		private void SetTime(object start)
 		{
-			if (!InvokeRequired)
-				lbl_Time.Text = (DateTime.Now - start).ToString();
-			else
-				Invoke(new SetTimeDelegate(SetTime), new object[] { start });
+		    lbl_Time.Invoke(new Action(() => {lbl_Time.Text = (DateTime.Now - (DateTime)start).ToString(); }));
 		}
 
 		private void ClearTwResult(TreeView node)
 		{
-			if (!InvokeRequired)
-				node.Nodes.Clear();
-			else if (node != null) Invoke(new ClearTwResultDelegate(ClearTwResult), new object[] { node });
+            node.Invoke(new Action(() => { node.Nodes.Clear(); }));
 		}
 
-		private void AddTwResult(TreeView node, string path)
+		private void AddTwResult(TreeView treeView, string path)
 		{
-			if (!InvokeRequired)
-				node.Nodes.Add(path);
-			else if (node != null) Invoke(new AddTwResultDelegate(AddTwResult), new object[] { node, path });
+            treeView.Invoke(new Action(() => { treeView.Nodes.Add(path); }));
 		}
 
-		private void AddTwResultTreeNode(TreeNode node, string path)
+		private void AddTwResult(TreeNode node, string path)
 		{
-			if (!InvokeRequired)
-				node.Nodes.Add(path);
-			else if (node != null) Invoke(new AddTwResultDelegateTreeNode(AddTwResultTreeNode), new object[] { node, path });
+            Invoke(new Action(() => { node.Nodes.Add(path); }));
 		}
 
-		private void AddTwResultTreeNode(TreeNode node, TreeNode childnode)
+		private void AddTwResult(TreeNode node, TreeNode childnode)
 		{
-			if (!InvokeRequired)
-				node.Nodes.Add(childnode);
-			else if (node != null) Invoke(new AddTwResultDelegateTreeNodeReloadChildNode(AddTwResultTreeNode), new object[] { node, childnode });
+            Invoke(new Action(()=>node.Nodes.Add(childnode)));
 		}
-
-		private delegate void AddTwResultDelegateTreeNodeReloadChildNode(TreeNode node, TreeNode childnode);
-
-		private delegate void AddTwResultDelegateTreeNode(TreeNode node, string path);
-
-		private delegate void AddTwResultDelegate(TreeView node, string path);
-
-		private delegate void ClearTwResultDelegate(TreeView node);
-
-		private delegate void SetTimeDelegate(DateTime start);
-
-		private delegate void SetCountDelegate(int parameter);
-
-		private delegate void SetItemDelegate(string parameter);
-
-		private delegate void SetStringDelegate(string parameter);
 		#endregion
 
 		#region сохранение результата в файл
+        /// <summary>
+        /// Сохранение результата в файл
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
 		private void btn_SaveResult_Click(object sender, EventArgs e)
 		{
 			saveFileDialog1.Filter = @"txt files (*.txt)|*.txt|All files (*.*)|*.*";
@@ -300,9 +312,16 @@ namespace FindFilesApplication
 		}
 		#endregion
 
-		#region сохранение параметров
+		#region сохранение и считывание параметров
+        /// <summary>
+        /// Сохранение параметров перед закрытием формы
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
 		private void Form1_FormClosed(object sender, FormClosedEventArgs e)
 		{
+            if (_thread != null)
+                _thread.Abort();
 			using (RegistryKey key = Registry.CurrentUser.OpenSubKey("Software\\AppFind", true))
 			{
 				if (key != null)
@@ -319,6 +338,11 @@ namespace FindFilesApplication
 			}
 		}
 
+        /// <summary>
+        /// Считывание сохраненных в реестре значений
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
 		private void Form1_Load(object sender, EventArgs e)
 		{
 			RegistryKey key = Registry.CurrentUser.OpenSubKey("Software\\AppFind") ??
